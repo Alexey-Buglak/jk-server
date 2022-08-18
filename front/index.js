@@ -3,7 +3,7 @@ import parser from './components/parser.js'
 import { CronJob } from 'cron'
 // import http from 'http'
 // import httpProxy from 'http-proxy'
-// import XMLHttpRequest from 'xhr2'
+import XMLHttpRequest from 'xhr2'
 
 function sendComplex() {
   const data = parser(
@@ -62,15 +62,18 @@ const recipientAndSenler = () => {
   })
   job.start()
 
-  // const oReq = new XMLHttpRequest()
+  // ****** TODO ***** //
 
+  // const oReq = new XMLHttpRequest()
   // oReq.open(
   //   'GET',
-  //   http,
+  //   'https://realtyprotech.com/xml/84d6f6aa68698c0f8f199710fa9c84b7/cian/',
   //   true
-  //   )
+  // )
   //   oReq.send()
-  //   console.log(oReq.responseText);
+  //   console.log(oReq.status);
+  
+  // ****** TODO ***** //
 }
 
 export default recipientAndSenler
