@@ -1,11 +1,15 @@
 import express from 'express';
+import request from 'request'
 import mongoose from 'mongoose';
 import dotnet from 'dotenv';
+
+// почистить пакеты от лишних баблиотек\пакетов
 
 import apartmentsRoute from './routes/apartment.route.js';
 import complexRoute from './routes/complex.route.js';
 
 import recipientAndSenler from './front/index.js'
+import parser from './front/components/parser.js';
 
 
 const app = express();
@@ -24,6 +28,39 @@ app.use(express.json())
 // ROUTES //
 app.use('/api/apatments', apartmentsRoute)
 app.use('/api/complex', complexRoute)
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*')
+  next()
+})
+
+app.get('/proxy/apartments', (req, res) => {
+  request(
+    {
+      url: 'https://realtyprotech.com/xml/84d6f6aa68698c0f8f199710fa9c84b7/cian/'
+    },
+    (error, response, body) => {
+      if (error || response.statusCode !== 200) {
+        return res.status(500).json({ type: 'error', message: err.message })
+      }
+      const apartmentsData = parser(body)
+      res.send(apartmentsData)
+    }
+  )
+})
+app.get('/proxy/complex', (req, res) => {
+  request(
+    {
+      url: 'https://realtyprotech.com/xml/84d6f6aa68698c0f8f199710fa9c84b7/domclick/'
+    },
+    (error, response, body) => {
+      if (error || response.statusCode !== 200) {
+        return res.status(500).json({ type: 'error', message: err.message })
+      }
+      const complexData = parser(body)
+      res.send(complexData)
+    }
+  )
+})
 
 // CONNECT TO DB //
 async function connectToDB() {
